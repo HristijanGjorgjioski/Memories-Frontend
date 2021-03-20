@@ -20,7 +20,9 @@ const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  useEffect(() => {}, [post]);
+  useEffect(() => {
+    if (post) setPostData(post);
+  }, [post]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,9 +32,19 @@ const Form = ({ currentId, setCurrentId }) => {
     } else {
       dispatch(createPost(postData));
     }
+    clear();
   };
 
-  const clear = () => {};
+  const clear = () => {
+    setCurrentId(null);
+    setPostData({
+      creator: '',
+      title: '',
+      message: '',
+      tags: '',
+      selectedFile: '',
+    });
+  };
 
   return (
     <Paper className={classes.paper}>
@@ -42,7 +54,9 @@ const Form = ({ currentId, setCurrentId }) => {
         className={`${classes.root} ${classes.form}`}
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">Creating a Memory</Typography>
+        <Typography variant="h6">
+          {currentId ? 'Editing' : 'Creating'} a Memory
+        </Typography>
         <TextField
           name="creator"
           variant="outlined"
